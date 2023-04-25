@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/hsts-max-age: '31536000'
+    nginx.ingress.kubernetes.io/proxy-body-size: 32m
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: webapp-ingress
+  namespace: app
+spec:
+  rules:
+    - host: frontend.20.61.129.28.nip.io
+      http:
+        paths:
+          - backend:
+              service:
+                name: mvc-service
+                port:
+                  number: 80
+            path: /webapp1(/|$)(.*)
+            pathType: Exact

@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mvc-deployment
+  namespace: app 
+spec:
+  selector:
+    matchLabels:
+      app: mvc
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: mvc
+    spec:
+      containers:
+      - name: mvc
+        # image: kameshpudi/productsstoreonkubernetes:v1.0
+        # image: houssemdocker/webapp:111
+        image: houssemdocker/products-store-mvc:v1.0
+        # image: __ACR_NAME__.azurecr.io/__DOCKER_IMAGE__:__TAG__
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 300m
+            memory: "100Mi"
+          requests:
+            cpu: 100m
+            memory: "50Mi"
+        env:
+          - name: ConnectionStrings__ProductsContext
+            valueFrom:
+              # configMapKeyRef:
+              #   name: mssql-connection-configmap
+              #   key: db-connection-string
+              secretKeyRef:
+                name: mssql-secret
+                key: db-connection-string-secret
+      nodeSelector:
+        agentpool: appsnodepool
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mvc-service
+  namespace: app
+spec:
+  selector:
+    app: mvc
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer #NodePort ClusterIP #
