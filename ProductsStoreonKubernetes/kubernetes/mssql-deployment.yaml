@@ -40,8 +40,8 @@ spec:
       - name: mssql-persistent-storage
         persistentVolumeClaim:
           claimName: mssql-pvc
-      nodeSelector:
-        agentpool: appsnodepool
+      # nodeSelector:
+      #   agentpool: appsnodepool
 ---
 apiVersion: v1
 kind: Service

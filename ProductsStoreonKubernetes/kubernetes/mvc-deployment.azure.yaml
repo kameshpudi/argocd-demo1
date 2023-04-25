@@ -37,8 +37,8 @@ spec:
               secretKeyRef:
                 name: mssql-secret
                 key: db-connection-string-secret
-      nodeSelector:
-        agentpool: appsnodepool
+      # nodeSelector:
+      #   agentpool: appsnodepool
 ---
 kind: Service
 apiVersion: v1
